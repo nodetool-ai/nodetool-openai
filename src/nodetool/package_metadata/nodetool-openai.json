@@ -1,0 +1,1016 @@
+{
+  "name": "nodetool-openai",
+  "description": "OpenAI support for Nodetool",
+  "version": "0.6.0",
+  "authors": [
+    "Matthias Georgi <matti.georgi@gmail.com>"
+  ],
+  "nodes": [
+    {
+      "title": "Chain Of Thought",
+      "description": "Agent node that implements chain-of-thought reasoning to break down complex problems\n    into step-by-step solutions.\n\n    Use cases:\n    - Complex problem solving requiring multiple steps\n    - Mathematical calculations with intermediate steps\n    - Logical reasoning and deduction tasks\n    - Step-by-step analysis of scenarios",
+      "namespace": "openai.agents",
+      "node_type": "openai.agents.ChainOfThought",
+      "layout": "default",
+      "properties": [
+        {
+          "name": "messages",
+          "type": {
+            "type": "list",
+            "type_args": [
+              {
+                "type": "message"
+              }
+            ]
+          },
+          "default": [],
+          "title": "Messages",
+          "description": "The messages to use in the prompt."
+        },
+        {
+          "name": "max_tokens",
+          "type": {
+            "type": "int"
+          },
+          "default": 4096,
+          "title": "Max Tokens",
+          "description": "The maximum number of tokens to generate.",
+          "min": 1.0,
+          "max": 100000.0
+        },
+        {
+          "name": "model",
+          "type": {
+            "type": "openai_model"
+          },
+          "default": {
+            "id": "gpt-4o"
+          },
+          "title": "Model",
+          "description": "The GPT model to use for chain of thought reasoning."
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "str"
+          },
+          "name": "analysis"
+        },
+        {
+          "type": {
+            "type": "list",
+            "type_args": [
+              {
+                "type": "thought_step"
+              }
+            ]
+          },
+          "name": "steps"
+        }
+      ],
+      "the_model_info": {},
+      "recommended_models": [],
+      "basic_fields": [
+        "messages",
+        "model"
+      ],
+      "is_dynamic": false
+    },
+    {
+      "title": "Chain Of Thought Summarizer",
+      "description": "Agent node that synthesizes the results from a chain of thought reasoning process\n    into a final, coherent conclusion.\n\n    Use cases:\n    - Summarizing multi-step reasoning processes\n    - Drawing final conclusions from step-by-step analysis\n    - Validating logical consistency across steps\n    - Generating executive summaries of complex reasoning",
+      "namespace": "openai.agents",
+      "node_type": "openai.agents.ChainOfThoughtSummarizer",
+      "layout": "default",
+      "properties": [
+        {
+          "name": "steps",
+          "type": {
+            "type": "list",
+            "type_args": [
+              {
+                "type": "thought_step"
+              }
+            ]
+          },
+          "default": [],
+          "title": "Steps",
+          "description": "The completed chain of thought steps with their results"
+        },
+        {
+          "name": "messages",
+          "type": {
+            "type": "list",
+            "type_args": [
+              {
+                "type": "message"
+              }
+            ]
+          },
+          "default": [],
+          "title": "Messages",
+          "description": "The messages used to generate the chain of thought steps"
+        },
+        {
+          "name": "max_tokens",
+          "type": {
+            "type": "int"
+          },
+          "default": 1000,
+          "title": "Max Tokens",
+          "description": "The maximum number of tokens to generate",
+          "min": 1.0,
+          "max": 100000.0
+        },
+        {
+          "name": "model",
+          "type": {
+            "type": "openai_model"
+          },
+          "default": {
+            "id": "o3-mini"
+          },
+          "title": "Model",
+          "description": "The GPT model to use for summarizing chain of thought results."
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "bool"
+          },
+          "name": "logical_consistency"
+        },
+        {
+          "type": {
+            "type": "list",
+            "type_args": [
+              {
+                "type": "str"
+              }
+            ]
+          },
+          "name": "consistency_issues"
+        },
+        {
+          "type": {
+            "type": "str"
+          },
+          "name": "final_answer"
+        },
+        {
+          "type": {
+            "type": "list",
+            "type_args": [
+              {
+                "type": "str"
+              }
+            ]
+          },
+          "name": "assumptions"
+        }
+      ],
+      "the_model_info": {},
+      "recommended_models": [],
+      "basic_fields": [
+        "steps",
+        "messages",
+        "model"
+      ],
+      "is_dynamic": false
+    },
+    {
+      "title": "Chart Generator",
+      "description": "LLM Agent to create chart configurations based on natural language descriptions.\n    llm, data visualization, charts\n\n    Use cases:\n    - Generating chart configurations from natural language descriptions\n    - Creating data visualizations programmatically\n    - Converting data analysis requirements into visual representations",
+      "namespace": "openai.agents",
+      "node_type": "openai.agents.ChartGenerator",
+      "layout": "default",
+      "properties": [
+        {
+          "name": "model",
+          "type": {
+            "type": "openai_model"
+          },
+          "default": {
+            "id": "o3-mini"
+          },
+          "title": "Model",
+          "description": "The GPT model to use for chart generation."
+        },
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "Natural language description of the desired chart"
+        },
+        {
+          "name": "data",
+          "type": {
+            "type": "dataframe"
+          },
+          "default": {},
+          "title": "Data",
+          "description": "The data to visualize"
+        },
+        {
+          "name": "max_tokens",
+          "type": {
+            "type": "int"
+          },
+          "default": 4096,
+          "title": "Max Tokens",
+          "description": "The maximum number of tokens to generate.",
+          "min": 1.0,
+          "max": 100000.0
+        },
+        {
+          "name": "columns",
+          "type": {
+            "type": "record_type"
+          },
+          "default": {},
+          "title": "Columns",
+          "description": "The columns available in the data."
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "chart_config"
+          },
+          "name": "output"
+        }
+      ],
+      "the_model_info": {},
+      "recommended_models": [],
+      "basic_fields": [
+        "prompt",
+        "data",
+        "model"
+      ],
+      "is_dynamic": false
+    },
+    {
+      "title": "Data Generator",
+      "description": "LLM Agent to create a dataframe based on a user prompt.\n    llm, dataframe creation, data structuring\n\n    Use cases:\n    - Generating structured data from natural language descriptions\n    - Creating sample datasets for testing or demonstration\n    - Converting unstructured text into tabular format",
+      "namespace": "openai.agents",
+      "node_type": "openai.agents.DataGenerator",
+      "layout": "default",
+      "properties": [
+        {
+          "name": "model",
+          "type": {
+            "type": "openai_model"
+          },
+          "default": {
+            "id": "o3-mini"
+          },
+          "title": "Model",
+          "description": "The GPT model to use for data generation."
+        },
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "The user prompt"
+        },
+        {
+          "name": "input_text",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Input Text",
+          "description": "The input text to be analyzed by the agent."
+        },
+        {
+          "name": "image",
+          "type": {
+            "type": "image"
+          },
+          "default": {},
+          "title": "Image",
+          "description": "The image to use in the prompt."
+        },
+        {
+          "name": "max_tokens",
+          "type": {
+            "type": "int"
+          },
+          "default": 4096,
+          "title": "Max Tokens",
+          "description": "The maximum number of tokens to generate.",
+          "min": 1.0,
+          "max": 100000.0
+        },
+        {
+          "name": "columns",
+          "type": {
+            "type": "record_type"
+          },
+          "default": {},
+          "title": "Columns",
+          "description": "The columns to use in the dataframe."
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "dataframe"
+          },
+          "name": "output"
+        }
+      ],
+      "the_model_info": {},
+      "recommended_models": [],
+      "basic_fields": [
+        "prompt",
+        "model",
+        "columns"
+      ],
+      "is_dynamic": false
+    },
+    {
+      "title": "Process Thought",
+      "description": "Agent node that implements iterative chain-of-thought reasoning, building upon previous steps\n    to solve complex problems incrementally.\n\n    Use cases:\n    - Complex problem solving requiring multiple iterations\n    - Mathematical proofs with multiple steps\n    - Logical deductions that build upon previous conclusions\n    - Iterative refinement of solutions",
+      "namespace": "openai.agents",
+      "node_type": "openai.agents.ProcessThought",
+      "layout": "default",
+      "properties": [
+        {
+          "name": "current_step",
+          "type": {
+            "type": "thought_step"
+          },
+          "default": {},
+          "title": "Current Step",
+          "description": "The current step or question to analyze"
+        },
+        {
+          "name": "max_tokens",
+          "type": {
+            "type": "int"
+          },
+          "default": 4096,
+          "title": "Max Tokens",
+          "description": "The maximum number of tokens to generate",
+          "min": 1.0,
+          "max": 100000.0
+        },
+        {
+          "name": "model",
+          "type": {
+            "type": "openai_model"
+          },
+          "default": {
+            "id": "o3-mini"
+          },
+          "title": "Model",
+          "description": "The GPT model to use for processing chain of thought steps."
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "str"
+          },
+          "name": "reasoning"
+        },
+        {
+          "type": {
+            "type": "str"
+          },
+          "name": "result"
+        }
+      ],
+      "the_model_info": {},
+      "recommended_models": [],
+      "basic_fields": [
+        "current_step",
+        "model"
+      ],
+      "is_dynamic": false
+    },
+    {
+      "title": "Regression Analyst",
+      "description": "Agent that performs regression analysis on a given dataframe and provides insights.\n\n    Use cases:\n    - Performing linear regression on datasets\n    - Interpreting regression results like a data scientist\n    - Providing statistical summaries and insights",
+      "namespace": "openai.agents",
+      "node_type": "openai.agents.RegressionAnalyst",
+      "layout": "default",
+      "properties": [
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "The user prompt or question regarding the data analysis."
+        },
+        {
+          "name": "data",
+          "type": {
+            "type": "dataframe"
+          },
+          "default": {},
+          "title": "Data",
+          "description": "The dataframe to perform regression on."
+        },
+        {
+          "name": "max_tokens",
+          "type": {
+            "type": "int"
+          },
+          "default": 1000,
+          "title": "Max Tokens",
+          "description": "The maximum number of tokens to generate.",
+          "min": 1.0,
+          "max": 100000.0
+        },
+        {
+          "name": "model",
+          "type": {
+            "type": "openai_model"
+          },
+          "default": {
+            "id": "o3-mini"
+          },
+          "title": "Model",
+          "description": "The GPT model to use for regression analysis."
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "str"
+          },
+          "name": "output"
+        }
+      ],
+      "the_model_info": {},
+      "recommended_models": [],
+      "basic_fields": [
+        "prompt",
+        "data",
+        "model"
+      ],
+      "is_dynamic": false
+    },
+    {
+      "title": "Synthesizer Agent",
+      "description": "Agent that interprets natural language descriptions to create sounds using basic synthesis algorithms.\n    llm, audio synthesis, sound design\n\n    Use cases:\n    - Creating sounds from text descriptions\n    - Automated sound design\n    - Converting musical ideas into synthesized audio",
+      "namespace": "openai.agents",
+      "node_type": "openai.agents.SynthesizerAgent",
+      "layout": "default",
+      "properties": [
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "Natural language description of the desired sound"
+        },
+        {
+          "name": "max_tokens",
+          "type": {
+            "type": "int"
+          },
+          "default": 1000,
+          "title": "Max Tokens",
+          "description": "The maximum number of tokens to generate.",
+          "min": 1.0,
+          "max": 100000.0
+        },
+        {
+          "name": "duration",
+          "type": {
+            "type": "float"
+          },
+          "default": 1.0,
+          "title": "Duration",
+          "description": "Duration of the sound in seconds.",
+          "min": 0.0,
+          "max": 30.0
+        },
+        {
+          "name": "model",
+          "type": {
+            "type": "openai_model"
+          },
+          "default": {
+            "id": "o3-mini"
+          },
+          "title": "Model",
+          "description": "The GPT model to use for sound synthesis."
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "audio"
+          },
+          "name": "output"
+        }
+      ],
+      "the_model_info": {},
+      "recommended_models": [],
+      "basic_fields": [
+        "prompt",
+        "duration",
+        "model"
+      ],
+      "is_dynamic": false
+    },
+    {
+      "title": "Embedding",
+      "description": "Generate vector representations of text for semantic analysis.\n    embeddings, similarity, search, clustering, classification\n\n    Uses OpenAI's embedding models to create dense vector representations of text.\n    These vectors capture semantic meaning, enabling:\n    - Semantic search\n    - Text clustering\n    - Document classification\n    - Recommendation systems\n    - Anomaly detection\n    - Measuring text similarity and diversity",
+      "namespace": "openai.text",
+      "node_type": "openai.text.Embedding",
+      "layout": "default",
+      "properties": [
+        {
+          "name": "input",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Input"
+        },
+        {
+          "name": "model",
+          "type": {
+            "type": "enum",
+            "values": [
+              "text-embedding-3-large",
+              "text-embedding-3-small"
+            ],
+            "type_name": "nodetool.nodes.openai.text.EmbeddingModel"
+          },
+          "default": "text-embedding-3-small",
+          "title": "Model"
+        },
+        {
+          "name": "chunk_size",
+          "type": {
+            "type": "int"
+          },
+          "default": 4096,
+          "title": "Chunk Size"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "np_array"
+          },
+          "name": "output"
+        }
+      ],
+      "the_model_info": {},
+      "recommended_models": [],
+      "basic_fields": [
+        "input",
+        "model",
+        "chunk_size"
+      ],
+      "is_dynamic": false
+    },
+    {
+      "title": "OpenAI Text",
+      "description": "Generate natural language responses using OpenAI models.\n    llm, text-generation, chatbot, question-answering\n\n    Leverages OpenAI's GPT models to:\n    - Generate human-like text responses\n    - Answer questions\n    - Complete prompts\n    - Engage in conversational interactions\n    - Assist with writing and editing tasks\n    - Perform text analysis and summarization",
+      "namespace": "openai.text",
+      "node_type": "openai.text.OpenAIText",
+      "layout": "default",
+      "properties": [
+        {
+          "name": "model",
+          "type": {
+            "type": "openai_model"
+          },
+          "default": {
+            "id": "o3-mini"
+          },
+          "title": "Model"
+        },
+        {
+          "name": "system",
+          "type": {
+            "type": "str"
+          },
+          "default": "You are a friendly assistant.",
+          "title": "System"
+        },
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt"
+        },
+        {
+          "name": "messages",
+          "type": {
+            "type": "list",
+            "type_args": [
+              {
+                "type": "message"
+              }
+            ]
+          },
+          "default": [],
+          "title": "Messages"
+        },
+        {
+          "name": "image",
+          "type": {
+            "type": "image"
+          },
+          "default": {},
+          "title": "Image"
+        },
+        {
+          "name": "presence_penalty",
+          "type": {
+            "type": "float"
+          },
+          "default": 0.0,
+          "title": "Presence Penalty",
+          "min": -2.0,
+          "max": 2.0
+        },
+        {
+          "name": "frequency_penalty",
+          "type": {
+            "type": "float"
+          },
+          "default": 0.0,
+          "title": "Frequency Penalty",
+          "min": -2.0,
+          "max": 2.0
+        },
+        {
+          "name": "max_tokens",
+          "type": {
+            "type": "int"
+          },
+          "default": 4096,
+          "title": "Max Tokens",
+          "min": 1.0,
+          "max": 100000.0
+        },
+        {
+          "name": "top_p",
+          "type": {
+            "type": "float"
+          },
+          "default": 1.0,
+          "title": "Top P",
+          "min": 0.0,
+          "max": 1.0
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "str"
+          },
+          "name": "output"
+        }
+      ],
+      "the_model_info": {},
+      "recommended_models": [],
+      "basic_fields": [
+        "prompt",
+        "model",
+        "temperature"
+      ],
+      "is_dynamic": false
+    },
+    {
+      "title": "Speech To Text",
+      "description": "Converts speech to text using OpenAI's speech-to-text API.\n    audio, transcription, speech-to-text, stt, whisper\n\n    Use cases:\n    - Generate accurate transcriptions of audio content\n    - Create searchable text from audio recordings\n    - Support multiple languages for transcription\n    - Enable automated subtitling and captioning",
+      "namespace": "openai.audio",
+      "node_type": "openai.audio.SpeechToText",
+      "layout": "default",
+      "properties": [
+        {
+          "name": "audio",
+          "type": {
+            "type": "audio"
+          },
+          "default": {},
+          "title": "Audio",
+          "description": "The audio file to transcribe (max 25 MB)."
+        },
+        {
+          "name": "language",
+          "type": {
+            "type": "enum",
+            "values": [
+              "auto_detect",
+              "spanish",
+              "italian",
+              "korean",
+              "portuguese",
+              "english",
+              "japanese",
+              "german",
+              "russian",
+              "dutch",
+              "polish",
+              "catalan",
+              "french",
+              "indonesian",
+              "ukrainian",
+              "turkish",
+              "malay",
+              "swedish",
+              "mandarin",
+              "finnish",
+              "norwegian",
+              "romanian",
+              "thai",
+              "vietnamese",
+              "slovak",
+              "arabic",
+              "czech",
+              "croatian",
+              "greek",
+              "serbian",
+              "danish",
+              "bulgarian",
+              "hungarian",
+              "filipino",
+              "bosnian",
+              "galician",
+              "macedonian",
+              "hindi",
+              "estonian",
+              "slovenian",
+              "tamil",
+              "latvian",
+              "azerbaijani",
+              "urdu",
+              "lithuanian",
+              "hebrew",
+              "welsh",
+              "persian",
+              "icelandic",
+              "kazakh",
+              "afrikaans",
+              "kannada",
+              "marathi",
+              "swahili",
+              "telugu",
+              "maori",
+              "nepali",
+              "armenian",
+              "belarusian",
+              "gujarati",
+              "punjabi",
+              "bengali"
+            ],
+            "type_name": "nodetool.nodes.openai.audio.TTSLanguage"
+          },
+          "default": "auto_detect",
+          "title": "Language",
+          "description": "The language of the input audio"
+        },
+        {
+          "name": "timestamps",
+          "type": {
+            "type": "bool"
+          },
+          "default": false,
+          "title": "Timestamps",
+          "description": "Whether to return timestamps for the generated text."
+        },
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "Optional text to guide the model's style or continue a previous audio segment."
+        },
+        {
+          "name": "temperature",
+          "type": {
+            "type": "float"
+          },
+          "default": 0,
+          "title": "Temperature",
+          "description": "The sampling temperature between 0 and 1. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic.",
+          "min": 0.0,
+          "max": 1.0
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "str"
+          },
+          "name": "text"
+        },
+        {
+          "type": {
+            "type": "list",
+            "type_args": [
+              {
+                "type": "audio_chunk"
+              }
+            ]
+          },
+          "name": "words"
+        },
+        {
+          "type": {
+            "type": "list",
+            "type_args": [
+              {
+                "type": "audio_chunk"
+              }
+            ]
+          },
+          "name": "segments"
+        }
+      ],
+      "the_model_info": {},
+      "recommended_models": [],
+      "basic_fields": [
+        "audio",
+        "language",
+        "timestamps"
+      ],
+      "is_dynamic": false
+    },
+    {
+      "title": "Text To Speech",
+      "description": "Converts text to speech using OpenAI TTS models.\n    audio, tts, text-to-speech, voice, synthesis\n\n    Use cases:\n    - Generate spoken content for videos or podcasts\n    - Create voice-overs for presentations\n    - Assist visually impaired users with text reading\n    - Produce audio versions of written content",
+      "namespace": "openai.audio",
+      "node_type": "openai.audio.TextToSpeech",
+      "layout": "default",
+      "properties": [
+        {
+          "name": "model",
+          "type": {
+            "type": "enum",
+            "values": [
+              "tts-1",
+              "tts-1-hd"
+            ],
+            "type_name": "nodetool.nodes.openai.audio.TtsModel"
+          },
+          "default": "tts-1",
+          "title": "Model"
+        },
+        {
+          "name": "voice",
+          "type": {
+            "type": "enum",
+            "values": [
+              "alloy",
+              "echo",
+              "fable",
+              "onyx",
+              "nova",
+              "shimmer"
+            ],
+            "type_name": "nodetool.nodes.openai.audio.Voice"
+          },
+          "default": "alloy",
+          "title": "Voice"
+        },
+        {
+          "name": "input",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Input"
+        },
+        {
+          "name": "speed",
+          "type": {
+            "type": "float"
+          },
+          "default": 1.0,
+          "title": "Speed",
+          "min": 0.25,
+          "max": 4.0
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "audio"
+          },
+          "name": "output"
+        }
+      ],
+      "the_model_info": {},
+      "recommended_models": [],
+      "basic_fields": [
+        "input",
+        "model",
+        "voice"
+      ],
+      "is_dynamic": false
+    },
+    {
+      "title": "Transcribe",
+      "description": "Transcribes speech from audio to text.\n    audio, transcription, speech-to-text, stt\n\n    Use cases:\n    - Convert recorded meetings or lectures to text\n    - Generate subtitles for videos\n    - Create searchable archives of audio content\n    - Assist hearing-impaired users with audio content",
+      "namespace": "openai.audio",
+      "node_type": "openai.audio.Transcribe",
+      "layout": "default",
+      "properties": [
+        {
+          "name": "audio",
+          "type": {
+            "type": "audio"
+          },
+          "default": {},
+          "title": "Audio",
+          "description": "The audio file to transcribe."
+        },
+        {
+          "name": "temperature",
+          "type": {
+            "type": "float"
+          },
+          "default": 0.0,
+          "title": "Temperature",
+          "description": "The temperature to use for the transcription."
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "str"
+          },
+          "name": "output"
+        }
+      ],
+      "the_model_info": {},
+      "recommended_models": [],
+      "basic_fields": [
+        "audio",
+        "temperature"
+      ],
+      "is_dynamic": false
+    },
+    {
+      "title": "Translate",
+      "description": "Translates speech in audio to English text.\n    audio, translation, speech-to-text, localization\n\n    Use cases:\n    - Translate foreign language audio content to English\n    - Create English transcripts of multilingual recordings\n    - Assist non-English speakers in understanding audio content\n    - Enable cross-language communication in audio formats",
+      "namespace": "openai.audio",
+      "node_type": "openai.audio.Translate",
+      "layout": "default",
+      "properties": [
+        {
+          "name": "audio",
+          "type": {
+            "type": "audio"
+          },
+          "default": {},
+          "title": "Audio",
+          "description": "The audio file to translate."
+        },
+        {
+          "name": "temperature",
+          "type": {
+            "type": "float"
+          },
+          "default": 0.0,
+          "title": "Temperature",
+          "description": "The temperature to use for the translation."
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "str"
+          },
+          "name": "output"
+        }
+      ],
+      "the_model_info": {},
+      "recommended_models": [],
+      "basic_fields": [
+        "audio",
+        "temperature"
+      ],
+      "is_dynamic": false
+    }
+  ]
+}
