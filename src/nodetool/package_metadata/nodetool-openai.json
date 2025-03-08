@@ -5,6 +5,7 @@
   "authors": [
     "Matthias Georgi <matti.georgi@gmail.com>"
   ],
+  "repo_id": "nodetool-ai/nodetool-openai",
   "nodes": [
     {
       "title": "Chain Of Thought",
@@ -1009,6 +1010,84 @@
       "basic_fields": [
         "audio",
         "temperature"
+      ],
+      "is_dynamic": false
+    },
+    {
+      "title": "Dall E",
+      "description": "Generates images from textual descriptions using DALL-E 3.\n    image, t2i, tti, text-to-image, create, generate, dall-e, picture, photo, art, drawing, illustration\n\n    Use cases:\n    1. Create custom illustrations for articles or presentations\n    2. Generate concept art for creative projects\n    3. Produce visual aids for educational content\n    4. Design unique marketing visuals or product mockups\n    5. Explore artistic ideas and styles programmatically",
+      "namespace": "openai.image",
+      "node_type": "openai.image.Dall_E",
+      "layout": "default",
+      "properties": [
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "The prompt to use."
+        },
+        {
+          "name": "size",
+          "type": {
+            "type": "enum",
+            "values": [
+              "1024x1024",
+              "1792x1024",
+              "1024x1792"
+            ],
+            "type_name": "nodetool.nodes.openai.image.Size"
+          },
+          "default": "1024x1024",
+          "title": "Size",
+          "description": "The size of the image to generate."
+        },
+        {
+          "name": "quality",
+          "type": {
+            "type": "enum",
+            "values": [
+              "standard",
+              "hd"
+            ],
+            "type_name": "nodetool.nodes.openai.image.Quality"
+          },
+          "default": "standard",
+          "title": "Quality",
+          "description": "The quality of the image to generate."
+        },
+        {
+          "name": "style",
+          "type": {
+            "type": "enum",
+            "values": [
+              "vivid",
+              "natural"
+            ],
+            "type_name": "nodetool.nodes.openai.image.Style"
+          },
+          "default": "natural",
+          "title": "Style",
+          "description": "The style to use."
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "image"
+          },
+          "name": "output"
+        }
+      ],
+      "the_model_info": {},
+      "recommended_models": [],
+      "basic_fields": [
+        "prompt",
+        "size",
+        "quality",
+        "style"
       ],
       "is_dynamic": false
     }

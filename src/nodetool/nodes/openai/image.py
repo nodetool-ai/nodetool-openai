@@ -2,7 +2,6 @@ from base64 import b64decode
 import PIL.Image
 from io import BytesIO
 from nodetool.common.environment import Environment
-from nodetool.providers.openai.cost_calculation import calculate_cost
 from nodetool.workflows.processing_context import ProcessingContext
 from nodetool.metadata.types import ImageRef, Provider
 from nodetool.workflows.base_node import BaseNode
@@ -10,6 +9,7 @@ from pydantic import Field
 from enum import Enum
 
 from openai.types.images_response import ImagesResponse
+from nodetool.nodes.openai.prediction import run_openai
 
 
 class Dall_E(BaseNode):
@@ -52,6 +52,7 @@ class Dall_E(BaseNode):
             node_id=self._id,
             provider=Provider.OpenAI,
             model="dall-e-3",
+            run_prediction_function=run_openai,
             params={
                 "prompt": self.prompt,
                 "style": self.style.value,

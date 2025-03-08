@@ -1,3 +1,4 @@
+from nodetool.nodes.openai.prediction import run_openai
 import numpy as np
 from nodetool.metadata.types import (
     ImageRef,
@@ -67,6 +68,7 @@ class Embedding(BaseNode):
             provider=Provider.OpenAI,
             params={"input": chunks},
             model=self.model.value,
+            run_prediction_function=run_openai,
         )
 
         res = CreateEmbeddingResponse(**response)
