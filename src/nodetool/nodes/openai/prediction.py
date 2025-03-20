@@ -1,6 +1,6 @@
 import base64
 from io import BytesIO
-from typing import Any
+from typing import Any, AsyncGenerator
 import openai
 import pydub
 
@@ -129,7 +129,9 @@ async def create_image(prediction: Prediction, client: openai.AsyncClient):
     )
 
 
-async def run_openai(prediction: Prediction, env: dict[str, str]) -> Any:
+async def run_openai(
+    prediction: Prediction, env: dict[str, str]
+) -> AsyncGenerator[PredictionResult, None]:
     model = prediction.model
     assert model is not None, "Model is not set"
 

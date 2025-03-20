@@ -14,7 +14,7 @@ from nodetool.workflows.base_node import BaseNode
 from nodetool.workflows.processing_context import ProcessingContext
 from nodetool.chat.chat import Chunk, generate_messages, process_messages
 from nodetool.metadata.types import FunctionModel, Provider
-
+from nodetool.chat.providers import OpenAIProvider
 
 from openai.types.chat import ChatCompletion, ChatCompletionMessageParam
 from openai.types.create_embedding_response import CreateEmbeddingResponse
@@ -65,7 +65,7 @@ class Embedding(BaseNode):
 
         response = await context.run_prediction(
             self.id,
-            provider=Provider.OpenAI,
+            provider="openai",
             params={"input": chunks},
             model=self.model.value,
             run_prediction_function=run_openai,
@@ -138,7 +138,8 @@ class OpenAIText(BaseNode):
         # Use generate_messages instead of process_messages
         async for chunk in generate_messages(
             messages=messages,
-            model=model,
+            provider=Provider.OpenAI,
+            model=model.name,
             max_tokens=self.max_tokens,
             top_p=self.top_p,
             presence_penalty=self.presence_penalty,
