@@ -1,12 +1,6 @@
 from nodetool.nodes.openai.prediction import run_openai
 import numpy as np
 from nodetool.metadata.types import (
-    ImageRef,
-    Message,
-    MessageImageContent,
-    MessageTextContent,
-    OpenAIModel,
-    Provider,
     NPArray,
 )
 from nodetool.workflows.base_node import BaseNode
